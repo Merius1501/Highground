@@ -1,0 +1,62 @@
+// Arduino Transmission Code
+
+#include <VirtualWire.h>
+
+const int led_pin = 13;
+const int transmit_pin = 4;
+
+char msg[2];
+
+int x = 10;
+
+void setup() {
+  // put your setup code here, to run once:
+Serial.begin(9600);
+vw_set_tx_pin(transmit_pin);
+vw_set_ptt_inverted(true); // Required for DR3100
+vw_setup(2000);   // Bits per sec
+
+pinMode(2, INPUT_PULLUP);
+pinMode(3, INPUT_PULLUP);
+pinMode(led_pin, OUTPUT);
+}
+
+
+
+void loop() {
+  // put your main code here, to run repeatedly:
+
+x = 10;
+
+if (digitalRead(2) == LOW)
+{
+ x = 1;
+}
+if (digitalRead(3) == LOW)
+{
+  x = 0;
+}
+
+if (x == 1)
+{
+int y = 1;
+itoa(y,msg,10);
+    digitalWrite(13, true); // Flash a light to show transmitting
+    vw_send((uint8_t *)msg, strlen(msg));
+    vw_wait_tx(); // Wait until the whole message is gone
+    digitalWrite(13, false);
+    delay(200);
+    Serial.println("on");
+}
+else if (x == 0)
+{
+int y = 0;
+ itoa(y,msg,10);
+    digitalWrite(13, true); // Flash a light to show transmitting
+    vw_send((uint8_t *)msg, strlen(msg));
+    vw_wait_tx(); // Wait until the whole message is gone
+    digitalWrite(13, false);
+    delay(200);
+    Serial.println("off");
+}
+}
