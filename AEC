@@ -1,4 +1,4 @@
-//Arduino Emission Code
+//Arduino Receptor Code
 #include <VirtualWire.h> 
 
 int valor_recebido_RF;
